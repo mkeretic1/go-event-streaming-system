@@ -16,8 +16,13 @@ func main() {
 
 	log.Println("Client connected successfully")
 
+	// receive new events on stream
 	stream1 := c.Subscribe("stream1", eventstream.SubscriptionModeNew)
+
+	// receive all previous events and new events on stream
 	stream2 := c.Subscribe("stream2", eventstream.SubscriptionModeAll)
+
+	// receive all previous events on stream with id > afterId and new events on stream
 	stream3 := c.Subscribe("stream3", eventstream.SubscriptionModeAfter, 5)
 
 	for {
