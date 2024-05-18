@@ -56,8 +56,6 @@ func main() {
     }
 ```
 
-Client subscribing examples 
-
 #### Publishing a Message
 Here's how to publish a message to a stream called "stream1".  See the full example [here](/cmd/client-publisher/main.go).
 
@@ -79,5 +77,3 @@ func main() {
     }
 }
 ```
-
-Client publishing examples 
