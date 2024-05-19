@@ -9,8 +9,7 @@ import (
 func main() {
 	c, err := client.Connect("localhost:8080")
 	if err != nil {
-		log.Println("Error connecting to server:", err)
-		return
+		log.Fatal("Error connecting to server:", err)
 	}
 	defer c.Close()
 

@@ -42,14 +42,16 @@ Here's how to subscribe to a stream called "stream1". See the full example [here
 func main() {
     c, err := client.Connect("localhost:8080")
     if err != nil {
-        log.Println("Error connecting to server:", err)
-        return
+        log.Fatal("Error connecting to server:", err)
     }
     defer c.Close()
 
     log.Println("Client connected successfully")
 
-    stream := c.Subscribe("stream1", eventstream.SubscriptionModeAll)
+    stream, err := c.Subscribe("stream1", eventstream.SubscriptionModeNew)
+    if err != nil {
+        log.Fatal("Error subscribing to stream:", err)
+    }
 
     for msg := <-stream.Chan() {
         log.Printf("Message received: %s", msg)
@@ -63,8 +65,7 @@ Here's how to publish a message to a stream called "stream1".  See the full exam
 func main() {
     c, err := client.Connect("localhost:8080")
     if err != nil {
-        log.Println("Error connecting to server:", err)
-        return
+        log.Fatal("Error connecting to server:", err)
     }
     defer c.Close()
 
@@ -72,8 +73,7 @@ func main() {
 
     err = c.Publish("stream1", "Hello World!")
     if err != nil {
-        log.Println("Error Publish:", err)
-        return
+        log.Fatal("Error publishing to stream:", err)
     }
 }
 ```
