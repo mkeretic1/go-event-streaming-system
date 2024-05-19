@@ -53,9 +53,12 @@ func main() {
         log.Fatal("Error subscribing to stream:", err)
     }
 
-    for msg := <-stream.Chan() {
-        log.Printf("Message received: %s", msg)
-    }
+    for {
+        select {
+        case msg := <-stream.Chan():
+            log.Printf("Message received: %s", msg)
+        }
+}
 ```
 
 #### Publishing a Message
