@@ -17,13 +17,22 @@ func main() {
 	log.Println("Client connected successfully")
 
 	// receive new events on stream
-	stream1 := c.Subscribe("stream1", eventstream.SubscriptionModeNew)
+	stream1, err := c.Subscribe("stream1", eventstream.SubscriptionModeNew)
+	if err != nil {
+		log.Fatal("Error subscribing to stream:", err)
+	}
 
 	// receive all previous events and new events on stream
-	stream2 := c.Subscribe("stream2", eventstream.SubscriptionModeAll)
+	stream2, err := c.Subscribe("stream2", eventstream.SubscriptionModeAll)
+	if err != nil {
+		log.Fatal("Error subscribing to stream:", err)
+	}
 
 	// receive all previous events on stream with id > afterId and new events on stream
-	stream3 := c.Subscribe("stream3", eventstream.SubscriptionModeAfter, 5)
+	stream3, err := c.Subscribe("stream3", eventstream.SubscriptionModeAfter, 5)
+	if err != nil {
+		log.Fatal("Error subscribing to stream:", err)
+	}
 
 	for {
 		select {

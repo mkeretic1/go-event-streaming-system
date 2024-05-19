@@ -60,7 +60,7 @@ func (e *EventSystem) HandleConnection(conn net.Conn) {
 				e.unregisterSubscriber(esClient)
 				break
 			}
-			log.Println("Error decoding Message:", err)
+			log.Printf("Error decoding Message from client '%s': %v", esClient.uid, err)
 			continue
 		}
 
@@ -69,7 +69,7 @@ func (e *EventSystem) HandleConnection(conn net.Conn) {
 		case ActionTypePublish:
 			var publish Publish
 			if err := json.Unmarshal(action.Data, &publish); err != nil {
-				log.Println("Error decoding Publish Message:", err)
+				log.Printf("Error decoding Publish Action from client '%s': %v", esClient.uid, err)
 				continue
 			}
 
@@ -78,7 +78,7 @@ func (e *EventSystem) HandleConnection(conn net.Conn) {
 		case ActionTypeSubscribe:
 			var subscribe Subscribe
 			if err := json.Unmarshal(action.Data, &subscribe); err != nil {
-				log.Println("Error decoding Subscribe Message:", err)
+				log.Printf("Error decoding Subscribe Action from client '%s': %v", esClient.uid, err)
 				continue
 			}
 

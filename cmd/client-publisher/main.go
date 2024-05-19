@@ -8,8 +8,7 @@ import (
 func main() {
 	c, err := client.Connect("localhost:8080")
 	if err != nil {
-		log.Println("Error connecting to server:", err)
-		return
+		log.Fatal("Error connecting to server:", err)
 	}
 	defer c.Close()
 
@@ -17,19 +16,16 @@ func main() {
 
 	err = c.Publish("stream1", "Hello World!")
 	if err != nil {
-		log.Println("Error Publish:", err)
-		return
+		log.Fatal("Error publishing to stream:", err)
 	}
 
 	err = c.Publish("stream1", "Another message")
 	if err != nil {
-		log.Println("Error Publish:", err)
-		return
+		log.Fatal("Error publishing to stream:", err)
 	}
 
 	err = c.Publish("stream2", "This one goes to stream2")
 	if err != nil {
-		log.Println("Error Publish:", err)
-		return
+		log.Fatal("Error publishing to stream:", err)
 	}
 }

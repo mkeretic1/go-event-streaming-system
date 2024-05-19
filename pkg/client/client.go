@@ -2,7 +2,9 @@ package client
 
 import (
 	"encoding/json"
+	"errors"
 	eventstream "event-streaming-system/pkg/server/eventstream"
+	"fmt"
 	"log"
 	"net"
 )
@@ -40,27 +42,27 @@ func (c *Client) Publish(stream string, message string) error {
 }
 
 // Subscribe sets up a subscription to a stream and listens for messages from server.
-func (c *Client) Subscribe(stream string, subscriptionMode eventstream.SubscriptionMode, afterId ...int) *EventListener {
+func (c *Client) Subscribe(stream string, subscriptionMode eventstream.SubscriptionMode, afterId ...int) (*EventListener, error) {
 	if subscriptionMode == eventstream.SubscriptionModeAfter && len(afterId) == 0 {
-		log.Fatalf("Used SubscriptionModeAfter, but 'afterId' was not specified")
+		return nil, errors.New("used SubscriptionModeAfter, but 'afterId' was not specified")
 	}
 
 	action, err := eventstream.NewSubscribeAction(stream, subscriptionMode, afterId...)
 	if err != nil {
-		log.Fatalf("Failed to instantiate subscriber action: %v", err)
+		return nil, errors.New(fmt.Sprintf("Failed to instantiate subscriber action: %v", err))
 	}
 
 	data, err := json.Marshal(action)
 	if err != nil {
-		log.Fatalf("Error marshaling data to JSON: %v", err)
+		return nil, errors.New(fmt.Sprintf("Error marshaling data to JSON: %v", err))
 	}
 
 	_, err = c.conn.Write(data)
 	if err != nil {
-		log.Fatalf("Error Subscribing to stream: %v", err)
+		return nil, errors.New(fmt.Sprintf("Error Subscribing to stream: %v", err))
 	}
 
-	return c.createListener()
+	return c.createListener(), nil
 }
 
 // Close closes the connection to the server
